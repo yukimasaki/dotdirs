@@ -17,9 +17,11 @@ backup_existing_file() {
     
     if [ -e "$file" ] && [ ! -L "$file" ]; then
         msg_warning "既存のファイルをバックアップ: $file"
-        mkdir -p "$backup_dir"
-        cp "$file" "$backup_dir/"
+        mkdir -p "$backup_dir" || return 1
+        cp "$file" "$backup_dir/" || return 1
+        return 0
     fi
+    return 0
 }
 
 

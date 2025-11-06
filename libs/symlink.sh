@@ -55,6 +55,14 @@ create_symlink_for_dotfile() {
         mkdir -p "$target_parent"
     fi
     
+    # 既存ファイルが通常ファイルの場合（プロジェクト固有の可能性）
+    # このチェックを先に実行する（シンボリックリンクのチェックより先）
+    if [ -e "$target_file" ] && [ ! -L "$target_file" ] && [ -f "$target_file" ]; then
+        msg_warning "警告: $dotfile は既に通常ファイルとして存在します"
+        msg_warning "プロジェクト固有のファイルの可能性があるため、スキップします"
+        return 1
+    fi
+    
     # 既に正しいシンボリックリンクが存在する場合はスキップ
     local source_abs
     source_abs=$(realpath "$source_file" 2>/dev/null || echo "$source_file")
@@ -63,23 +71,16 @@ create_symlink_for_dotfile() {
         return 0
     fi
     
-    # 既存ファイルが通常ファイルの場合（プロジェクト固有の可能性）
-    if [ -f "$target_file" ] && [ ! -L "$target_file" ]; then
-        msg_warning "警告: $dotfile は既に通常ファイルとして存在します"
-        msg_warning "プロジェクト固有のファイルの可能性があるため、スキップします"
-        return 1
-    fi
-    
     # 既存ファイルのバックアップ
     backup_existing_file "$target_file" "$backup_dir"
     
     # 既存のファイルまたはリンクを削除
     if [ -e "$target_file" ]; then
-        rm -rf "$target_file"
+        rm -f "$target_file" || rm -rf "$target_file"
     fi
     
     # シンボリックリンクを作成（絶対パスで作成）
-    ln -s "$source_abs" "$target_file"
+    ln -s "$source_abs" "$target_file" || return 1
     msg_success "✓ シンボリックリンクを作成: $dotfile"
 }
 

@@ -38,7 +38,7 @@ confirm_yes() {
     local default="${2:-y}"
     
     msg_info "$prompt"
-    read -p "" confirm
+    read confirm
     
     # デフォルトは[y]（空文字またはEnterキーでも[y]として扱う）
     if [ -z "$confirm" ] || [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
