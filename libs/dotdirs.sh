@@ -12,7 +12,8 @@ get_available_dotdirs() {
     # 再帰的に検索し、ドットファイル（.で始まるファイル）またはドットディレクトリ内のファイルを取得
     # -name ".*" : .で始まるファイル（ルート直下）
     # -path "*/.*/*" : ドットディレクトリ内のファイル（例: .cursor/commands/test.md）
-    find "$CONFIG_DIR" -type f \( -name ".*" -o -path "*/.*/*" -o -path "*/.?*/*" \) ! -name ".git*" ! -name ".DS_Store" ! -path "*/.git/*" | \
+    # .gitkeep はシンボリックリンクの対象から除外
+    find "$CONFIG_DIR" -type f \( -name ".*" -o -path "*/.*/*" -o -path "*/.?*/*" \) ! -name ".git*" ! -name ".DS_Store" ! -name ".gitkeep" ! -path "*/.git/*" | \
     sed "s|^$CONFIG_DIR/||" | sort
 }
 

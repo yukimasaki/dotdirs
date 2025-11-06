@@ -29,24 +29,32 @@
    git clone <repository-url> ~/dotdirs
    ```
 
-2. **プロジェクトディレクトリに移動**
+2. **config ディレクトリを作成（初回のみ）**
+
+   ```bash
+   mkdir -p ~/dotdirs/config
+   ```
+
+   **注意**: `config/` ディレクトリは各ユーザーが個人用のドットファイルを配置するため、Git の追跡対象外です。各ユーザーが自分の環境に合わせてドットファイルを配置してください。
+
+3. **プロジェクトディレクトリに移動**
 
    ```bash
    cd ~/repos/project_a
    ```
 
-3. **セットアップスクリプトを実行**
+4. **セットアップスクリプトを実行**
 
    ```bash
    ~/dotdirs/setup.sh
    ```
 
-4. **対話的にドットファイルを選択**
+5. **対話的にドットファイルを選択**
 
    - fzf UI で必要なドットファイルを選択（Tab または Ctrl+Space で複数選択）
    - Enter で確定
 
-5. **確認プロンプトに Enter を押す**
+6. **確認プロンプトに Enter を押す**
    - シンボリックリンク作成の確認（デフォルト: y）
    - `.gitignore` 更新の確認（デフォルト: y）
 
@@ -88,12 +96,9 @@
 
 このリポジトリ自体は通常の Git リポジトリとして管理します。
 
-```bash
-cd ~/dotdirs
-git add config/.editorconfig
-git commit -m "Add .editorconfig"
-git push
-```
+**重要**: `config/` ディレクトリは各ユーザーが個人用のドットファイルを配置するため、Git の追跡対象外です（`.gitignore` に追加されています）。各ユーザーが自分の環境に合わせて `config/` ディレクトリ内にドットファイルを配置してください。
+
+**注意**: `config/.gitkeep` は `config/` ディレクトリを保持するために Git で追跡されますが、シンボリックリンクの対象にはなりません。
 
 ### プロジェクトでの管理
 
@@ -139,8 +144,8 @@ git push
 │   ├── symlink.sh     # シンボリックリンク作成
 │   ├── gitignore.sh   # .gitignore 更新
 │   └── selection.sh   # fzf 選択処理と .dotdirsignore 管理
-├── config/            # ドットファイルを格納するディレクトリ
-│   ├── .editorconfig
+├── config/            # ドットファイルを格納するディレクトリ（個人用、Git 追跡対象外）
+│   ├── .editorconfig  # 各ユーザーが自分のドットファイルを配置
 │   ├── .prettierrc
 │   ├── .cursor/       # サブディレクトリも管理可能
 │   │   └── commands/
