@@ -6,7 +6,8 @@
 #  * @param {string} install_dir - プロジェクトがインストールされているディレクトリ。
 #  * @returns {number} 成功時は0、失敗時は1。
 #  */
-setup_shell() {
+# 内部関数: 実際のシェル設定ロジック
+_configure_shell() {
     local install_dir="$1"
     local bin_dir="${install_dir}/bin"
     local rein_link="${bin_dir}/rein"
@@ -67,5 +68,32 @@ setup_shell() {
             echo "$(gettext "Added") $bin_dir $(gettext "to PATH in") $config_file"
             echo "$(gettext "Please restart your shell or source") $config_file $(gettext "to apply changes.")"
         fi
+    fi
+
+}
+
+# /**
+#  * @function setup_shell
+#  * @description シェル環境のセットアップを行う（TUI対応）。
+#  * @param {string} install_dir - プロジェクトがインストールされているディレクトリ。
+#  * @returns {number} 成功時は0、失敗時は1。
+#  */
+setup_shell() {
+    local install_dir="$1"
+    
+    if command -v gum &> /dev/null; then
+        gum style \
+            --foreground 212 --border-foreground 212 --border double \
+            --align center --width 50 --margin "1 2" --padding "2 4" \
+            "$(gettext "Rein Installer")" "$(gettext "Interactive Setup")"
+        
+        echo "$(gettext "Installing Rein to") $install_dir..."
+        
+        # _configure_shell をエクスポートしてサブプロセスで使えるようにする
+        export -f _configure_shell
+        gum spin --spinner dot --title "$(gettext "Setting up shell...")" -- bash -c "_configure_shell \"$install_dir\""
+    else
+        echo "Installing Rein to $install_dir..."
+        _configure_shell "$install_dir"
     fi
 }

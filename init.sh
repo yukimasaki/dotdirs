@@ -42,25 +42,10 @@ if ! setup_gum; then
     exit 1
 fi
 
-# 3. シェルのセットアップ (gumを使用した対話モード)
-# この時点で gum が利用可能になっているはず
-if command -v gum &> /dev/null; then
-    gum style \
-        --foreground 212 --border-foreground 212 --border double \
-        --align center --width 50 --margin "1 2" --padding "2 4" \
-        "$(gettext "Rein Installer")" "$(gettext "Interactive Setup")"
-    
-    echo "$(gettext "Installing Rein to") $INSTALL_DIR..."
-    
-    export -f setup_shell
-    gum spin --spinner dot --title "$(gettext "Setting up shell...")" -- bash -c "setup_shell \"$INSTALL_DIR\""
-    
-
-else
-    # gumのインストールに失敗したがスクリプトが継続した場合のフォールバック (set -e があるため通常はここには来ない)
-    echo "Installing Rein to $INSTALL_DIR..."
-    setup_shell "$INSTALL_DIR"
-    echo "$(gettext "Installation Complete!")"
+# 3. シェルのセットアップ
+if ! setup_shell "$INSTALL_DIR"; then
+    echo "$(gettext "Failed to setup shell. Exiting.")"
+    exit 1
 fi
 
 # 4. Gitリポジトリ同期
