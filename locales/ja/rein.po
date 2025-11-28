@@ -1,0 +1,142 @@
+# Japanese translations for rein package.
+# Copyright (C) 2025 THE rein'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the rein package.
+# Yuki Masaki <woodenhoe@gmail.com>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: rein 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-29 01:13+0900\n"
+"PO-Revision-Date: 2025-11-29 01:13+0900\n"
+"Last-Translator: Yuki Masaki <woodenhoe@gmail.com>\n"
+"Language-Team: Japanese\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: init.sh:26
+msgid "Starting Rein setup..."
+msgstr "Reinのセットアップを開始します..."
+
+#: init.sh:34
+msgid "Failed to setup Homebrew. Exiting."
+msgstr "Homebrewのセットアップに失敗しました。終了します。"
+
+#: init.sh:40
+msgid "Failed to setup gum. Exiting."
+msgstr "gumのセットアップに失敗しました。終了します。"
+
+#: init.sh:51 init.sh:62
+msgid "Installing Rein to"
+msgstr "Reinを以下にインストールします:"
+
+#: init.sh:54
+msgid "Setting up shell..."
+msgstr "シェルを設定中..."
+
+#: init.sh:59 init.sh:64
+msgid "Installation Complete!"
+msgstr "インストールが完了しました！"
+
+#: init.sh:60
+msgid "Please restart your shell."
+msgstr "シェルを再起動してください。"
+
+#: init.sh:50
+msgid "Rein Installer"
+msgstr "Rein インストーラー"
+
+#: init.sh:50
+msgid "Interactive Setup"
+msgstr "対話型セットアップ"
+
+#: features/setup_gum.sh:10
+msgid "Checking gum..."
+msgstr "gumを確認中..."
+
+#: features/setup_gum.sh:13
+msgid "gum is already installed."
+msgstr "gumは既にインストールされています。"
+
+#: features/setup_gum.sh:18
+msgid "Error: Homebrew is required to install gum but not found."
+msgstr "エラー: gumをインストールするにはHomebrewが必要ですが、見つかりませんでした。"
+
+#: features/setup_gum.sh:22
+msgid "Installing gum..."
+msgstr "gumをインストール中..."
+
+#: features/setup_gum.sh:26
+msgid "Error: Failed to install gum."
+msgstr "エラー: gumのインストールに失敗しました。"
+
+#: features/setup_homebrew.sh:10
+msgid "Checking Homebrew..."
+msgstr "Homebrewを確認中..."
+
+#: features/setup_homebrew.sh:13
+msgid "Homebrew is already installed."
+msgstr "Homebrewは既にインストールされています。"
+
+#: features/setup_homebrew.sh:17
+msgid "Installing Homebrew..."
+msgstr "Homebrewをインストール中..."
+
+#: features/setup_homebrew.sh:21
+msgid "Error: Failed to install Homebrew."
+msgstr "エラー: Homebrewのインストールに失敗しました。"
+
+#: features/setup_homebrew.sh:28
+msgid "Configuring PATH for Homebrew..."
+msgstr "HomebrewのPATHを設定中..."
+
+#: features/setup_shell.sh:22
+msgid "Created symlink:"
+msgstr "シンボリックリンクを作成しました:"
+
+#: features/setup_shell.sh:24
+msgid "Error: main.sh not found at"
+msgstr "エラー: main.sh が以下に見つかりません:"
+
+#: features/setup_shell.sh:46
+msgid "Unsupported shell:"
+msgstr "サポートされていないシェルです:"
+
+#: features/setup_shell.sh:47
+msgid "Please manually add"
+msgstr "手動で追加してください:"
+
+#: features/setup_shell.sh:47
+msgid "to your PATH."
+msgstr "をPATHに追加してください。"
+
+#: features/setup_shell.sh:54
+msgid "Config file not found:"
+msgstr "設定ファイルが見つかりません:"
+
+#: features/setup_shell.sh:55
+msgid "Creating empty config file..."
+msgstr "空の設定ファイルを作成中..."
+
+#: features/setup_shell.sh:62
+msgid "PATH already configured in"
+msgstr "PATHは既に以下に設定されています:"
+
+#: features/setup_shell.sh:67
+msgid "Added"
+msgstr "追加しました:"
+
+#: features/setup_shell.sh:67
+msgid "to PATH in"
+msgstr "を以下のPATHに追加:"
+
+#: features/setup_shell.sh:68
+msgid "Please restart your shell or source"
+msgstr "シェルを再起動するか、以下をsourceしてください:"
+
+#: features/setup_shell.sh:68
+msgid "to apply changes."
+msgstr "変更を適用するために。"
