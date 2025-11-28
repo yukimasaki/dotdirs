@@ -27,6 +27,7 @@ echo "$(gettext "Starting Rein setup...")"
 # 機能モジュールを読み込む
 source "${INSTALL_DIR}/features/setup_homebrew.sh"
 source "${INSTALL_DIR}/features/setup_gum.sh"
+source "${INSTALL_DIR}/features/setup_git.sh"
 source "${INSTALL_DIR}/features/setup_shell.sh"
 
 # 1. Homebrewのセットアップ
@@ -54,14 +55,22 @@ if command -v gum &> /dev/null; then
     export -f setup_shell
     gum spin --spinner dot --title "$(gettext "Setting up shell...")" -- bash -c "setup_shell \"$INSTALL_DIR\""
     
-    gum style \
-        --foreground 82 --border-foreground 82 --border rounded \
-        --align center --width 50 --margin "1 2" --padding "2 4" \
-        "$(gettext "Installation Complete!")" \
-        "$(gettext "Please restart your shell.")"
+
 else
     # gumのインストールに失敗したがスクリプトが継続した場合のフォールバック (set -e があるため通常はここには来ない)
     echo "Installing Rein to $INSTALL_DIR..."
     setup_shell "$INSTALL_DIR"
     echo "$(gettext "Installation Complete!")"
 fi
+
+# 4. Gitリポジトリ同期
+if ! setup_git "$INSTALL_DIR"; then
+    echo "$(gettext "Failed to setup git repository. Exiting.")"
+    exit 1
+fi
+
+gum style \
+    --foreground 82 --border-foreground 82 --border rounded \
+    --align center --width 50 --margin "1 2" --padding "2 4" \
+    "$(gettext "Installation Complete!")" \
+    "$(gettext "Please restart your shell.")"

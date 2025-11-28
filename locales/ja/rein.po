@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rein 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 01:13+0900\n"
+"POT-Creation-Date: 2025-11-29 01:48+0900\n"
 "PO-Revision-Date: 2025-11-29 01:13+0900\n"
 "Last-Translator: Yuki Masaki <woodenhoe@gmail.com>\n"
 "Language-Team: Japanese\n"
@@ -17,41 +17,127 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: init.sh:26
+#: init.sh:25
 msgid "Starting Rein setup..."
 msgstr "Reinのセットアップを開始します..."
 
-#: init.sh:34
+#: init.sh:35
 msgid "Failed to setup Homebrew. Exiting."
 msgstr "Homebrewのセットアップに失敗しました。終了します。"
 
-#: init.sh:40
+#: init.sh:41
 msgid "Failed to setup gum. Exiting."
 msgstr "gumのセットアップに失敗しました。終了します。"
 
-#: init.sh:51 init.sh:62
-msgid "Installing Rein to"
-msgstr "Reinを以下にインストールします:"
+#: init.sh:47
+msgid "Failed to setup git repository. Exiting."
+msgstr "Gitリポジトリのセットアップに失敗しました。終了します。"
 
-#: init.sh:54
-msgid "Setting up shell..."
-msgstr "シェルを設定中..."
-
-#: init.sh:59 init.sh:64
-msgid "Installation Complete!"
-msgstr "インストールが完了しました！"
-
-#: init.sh:60
-msgid "Please restart your shell."
-msgstr "シェルを再起動してください。"
-
-#: init.sh:50
+#: init.sh:57
 msgid "Rein Installer"
 msgstr "Rein インストーラー"
 
-#: init.sh:50
+#: init.sh:57
 msgid "Interactive Setup"
 msgstr "対話型セットアップ"
+
+#: init.sh:59
+msgid "Installing Rein to"
+msgstr "Reinを以下にインストールします:"
+
+#: init.sh:62
+msgid "Setting up shell..."
+msgstr "シェルを設定中..."
+
+#: init.sh:67 init.sh:73
+msgid "Installation Complete!"
+msgstr "インストールが完了しました！"
+
+#: init.sh:68
+msgid "Please restart your shell."
+msgstr "シェルを再起動してください。"
+
+#: features/setup_git.sh:14
+msgid "Do you have a dotfiles repository to sync?"
+msgstr "同期するdotfilesリポジトリはありますか？"
+
+#: features/setup_git.sh:15
+msgid "Skipping repository sync."
+msgstr "リポジトリの同期をスキップします。"
+
+#: features/setup_git.sh:20
+msgid "Select protocol:"
+msgstr "プロトコルを選択してください:"
+
+#: features/setup_git.sh:27
+msgid "Enter repository URL (e.g., https://github.com/user/repo.git):"
+msgstr "リポジトリURLを入力してください (例: https://github.com/user/repo.git):"
+
+#: features/setup_git.sh:31
+msgid ""
+"Enter repository URL (e.g., git@github.com:user/repo.git or gh-alias:user/"
+"repo.git):"
+msgstr "リポジトリURLを入力してください (例: git@github.com:user/repo.git または gh-alias:user/repo.git):"
+
+#: features/setup_git.sh:37
+msgid "Error: Repository URL is required."
+msgstr "エラー: リポジトリURLは必須です。"
+
+#: features/setup_git.sh:42
+msgid "Testing connection to repository..."
+msgstr "リポジトリへの接続をテスト中..."
+
+#: features/setup_git.sh:44
+msgid "Error: Failed to connect to repository."
+msgstr "エラー: リポジトリへの接続に失敗しました。"
+
+#: features/setup_git.sh:45
+msgid "Please check the URL and your network connection."
+msgstr "URLとネットワーク接続を確認してください。"
+
+#: features/setup_git.sh:49
+msgid "Connection successful!"
+msgstr "接続に成功しました！"
+
+#: features/setup_git.sh:52
+msgid "Fetching branches..."
+msgstr "ブランチを取得中..."
+
+#: features/setup_git.sh:56
+msgid "Error: No branches found in repository."
+msgstr "エラー: リポジトリにブランチが見つかりません。"
+
+#: features/setup_git.sh:61
+msgid "Select branch to clone:"
+msgstr "クローンするブランチを選択してください:"
+
+#: features/setup_git.sh:65
+msgid "Error: Branch selection is required."
+msgstr "エラー: ブランチの選択は必須です。"
+
+#: features/setup_git.sh:71
+msgid "Warning: storage directory is not empty."
+msgstr "警告: storageディレクトリが空ではありません。"
+
+#: features/setup_git.sh:72
+msgid "Do you want to remove existing contents and clone?"
+msgstr "既存の内容を削除してクローンしますか？"
+
+#: features/setup_git.sh:73
+msgid "Clone cancelled."
+msgstr "クローンをキャンセルしました。"
+
+#: features/setup_git.sh:81
+msgid "Cloning repository..."
+msgstr "リポジトリをクローン中..."
+
+#: features/setup_git.sh:83
+msgid "Repository cloned successfully to"
+msgstr "リポジトリを以下に正常にクローンしました:"
+
+#: features/setup_git.sh:86
+msgid "Error: Failed to clone repository."
+msgstr "エラー: リポジトリのクローンに失敗しました。"
 
 #: features/setup_gum.sh:10
 msgid "Checking gum..."
@@ -63,7 +149,8 @@ msgstr "gumは既にインストールされています。"
 
 #: features/setup_gum.sh:18
 msgid "Error: Homebrew is required to install gum but not found."
-msgstr "エラー: gumをインストールするにはHomebrewが必要ですが、見つかりませんでした。"
+msgstr ""
+"エラー: gumをインストールするにはHomebrewが必要ですが、見つかりませんでした。"
 
 #: features/setup_gum.sh:22
 msgid "Installing gum..."

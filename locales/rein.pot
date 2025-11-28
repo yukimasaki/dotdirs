@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-29 01:21+0900\n"
+"POT-Creation-Date: 2025-11-29 01:48+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,36 +21,122 @@ msgstr ""
 msgid "Starting Rein setup..."
 msgstr ""
 
-#: init.sh:34
+#: init.sh:35
 msgid "Failed to setup Homebrew. Exiting."
 msgstr ""
 
-#: init.sh:40
+#: init.sh:41
 msgid "Failed to setup gum. Exiting."
 msgstr ""
 
-#: init.sh:50
+#: init.sh:47
+msgid "Failed to setup git repository. Exiting."
+msgstr ""
+
+#: init.sh:57
 msgid "Rein Installer"
 msgstr ""
 
-#: init.sh:50
+#: init.sh:57
 msgid "Interactive Setup"
 msgstr ""
 
-#: init.sh:52
+#: init.sh:59
 msgid "Installing Rein to"
 msgstr ""
 
-#: init.sh:55
+#: init.sh:62
 msgid "Setting up shell..."
 msgstr ""
 
-#: init.sh:60 init.sh:66
+#: init.sh:67 init.sh:73
 msgid "Installation Complete!"
 msgstr ""
 
-#: init.sh:61
+#: init.sh:68
 msgid "Please restart your shell."
+msgstr ""
+
+#: features/setup_git.sh:14
+msgid "Do you have a dotfiles repository to sync?"
+msgstr ""
+
+#: features/setup_git.sh:15
+msgid "Skipping repository sync."
+msgstr ""
+
+#: features/setup_git.sh:20
+msgid "Select protocol:"
+msgstr ""
+
+#: features/setup_git.sh:27
+msgid "Enter repository URL (e.g., https://github.com/user/repo.git):"
+msgstr ""
+
+#: features/setup_git.sh:31
+msgid ""
+"Enter repository URL (e.g., git@github.com:user/repo.git or gh-alias:user/"
+"repo.git):"
+msgstr ""
+
+#: features/setup_git.sh:37
+msgid "Error: Repository URL is required."
+msgstr ""
+
+#: features/setup_git.sh:42
+msgid "Testing connection to repository..."
+msgstr ""
+
+#: features/setup_git.sh:44
+msgid "Error: Failed to connect to repository."
+msgstr ""
+
+#: features/setup_git.sh:45
+msgid "Please check the URL and your network connection."
+msgstr ""
+
+#: features/setup_git.sh:49
+msgid "Connection successful!"
+msgstr ""
+
+#: features/setup_git.sh:52
+msgid "Fetching branches..."
+msgstr ""
+
+#: features/setup_git.sh:56
+msgid "Error: No branches found in repository."
+msgstr ""
+
+#: features/setup_git.sh:61
+msgid "Select branch to clone:"
+msgstr ""
+
+#: features/setup_git.sh:65
+msgid "Error: Branch selection is required."
+msgstr ""
+
+#: features/setup_git.sh:71
+msgid "Warning: storage directory is not empty."
+msgstr ""
+
+#: features/setup_git.sh:72
+msgid "Do you want to remove existing contents and clone?"
+msgstr ""
+
+#: features/setup_git.sh:73
+msgid "Clone cancelled."
+msgstr ""
+
+#: features/setup_git.sh:81
+msgid "Cloning repository..."
+msgstr ""
+
+#: features/setup_git.sh:83
+msgid "Repository cloned successfully to"
+msgstr ""
+
+#: features/setup_git.sh:86
+msgid "Error: Failed to clone repository."
 msgstr ""
 
 #: features/setup_gum.sh:10
