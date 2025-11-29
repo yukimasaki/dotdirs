@@ -20,9 +20,9 @@ _configure_shell() {
 
     if [ -f "$main_script" ]; then
         ln -sf "$main_script" "$rein_link"
-        echo "$(gettext "Created symlink:") $rein_link -> $main_script"
+        echo "Created symlink: $rein_link -> $main_script"
     else
-        echo "$(gettext "Error: main.sh not found at") $main_script"
+        echo "Error: main.sh not found at $main_script"
         return 1
     fi
 
@@ -44,29 +44,29 @@ _configure_shell() {
             path_cmd="set -gx PATH \$PATH $bin_dir"
             ;;
         *)
-            echo "$(gettext "Unsupported shell:") $shell_name"
-            echo "$(gettext "Please manually add") $bin_dir $(gettext "to your PATH.")"
+            echo "Unsupported shell: $shell_name"
+            echo "Please manually add $bin_dir to your PATH."
             return 0
             ;;
     esac
 
     if [ -n "$config_file" ]; then
         if [ ! -f "$config_file" ]; then
-            echo "$(gettext "Config file not found:") $config_file"
-            echo "$(gettext "Creating empty config file...")"
+            echo "Config file not found: $config_file"
+            echo "Creating empty config file..."
             mkdir -p "$(dirname "$config_file")"
             touch "$config_file"
         fi
 
         # 既に追加されているか確認
         if grep -q "$bin_dir" "$config_file"; then
-            echo "$(gettext "PATH already configured in") $config_file"
+            echo "PATH already configured in $config_file"
         else
             echo "" >> "$config_file"
             echo "# Added by Rein init script" >> "$config_file"
             echo "$path_cmd" >> "$config_file"
-            echo "$(gettext "Added") $bin_dir $(gettext "to PATH in") $config_file"
-            echo "$(gettext "Please restart your shell or source") $config_file $(gettext "to apply changes.")"
+            echo "Added $bin_dir to PATH in $config_file"
+            echo "Please restart your shell or source $config_file to apply changes."
         fi
     fi
 
@@ -85,13 +85,13 @@ setup_shell() {
         gum style \
             --foreground 212 --border-foreground 212 --border double \
             --align center --width 50 --margin "1 2" --padding "2 4" \
-            "$(gettext "Rein Installer")" "$(gettext "Interactive Setup")"
+            "Rein Installer" "Interactive Setup"
         
-        echo "$(gettext "Installing Rein to") $install_dir..."
+        echo "Installing Rein to $install_dir..."
         
         # _configure_shell をエクスポートしてサブプロセスで使えるようにする
         export -f _configure_shell
-        gum spin --spinner dot --title "$(gettext "Setting up shell...")" -- bash -c "_configure_shell \"$install_dir\""
+        gum spin --spinner dot --title "Setting up shell..." -- bash -c "_configure_shell \"$install_dir\""
     else
         echo "Installing Rein to $install_dir..."
         _configure_shell "$install_dir"

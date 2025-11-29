@@ -7,25 +7,25 @@
 #  */
 
 setup_homebrew() {
-    echo "$(gettext "Checking Homebrew...")"
+    echo "Checking Homebrew..."
 
     if command -v brew &> /dev/null; then
-        echo "$(gettext "Homebrew is already installed.")"
+        echo "Homebrew is already installed."
         return 0
     fi
 
-    echo "$(gettext "Installing Homebrew...")"
+    echo "Installing Homebrew..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
     if [ $? -ne 0 ]; then
-        echo "$(gettext "Error: Failed to install Homebrew.")"
+        echo "Error: Failed to install Homebrew."
         return 1
     fi
 
     # Linux用のPATH設定
     local linuxbrew_bin="/home/linuxbrew/.linuxbrew/bin"
     if [ -d "$linuxbrew_bin" ]; then
-        echo "$(gettext "Configuring PATH for Homebrew...")"
+        echo "Configuring PATH for Homebrew..."
         eval "$($linuxbrew_bin/brew shellenv)"
         
         # 後続のスクリプトのために現在のシェルのPATHに追加

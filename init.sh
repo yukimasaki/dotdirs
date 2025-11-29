@@ -14,15 +14,7 @@ INSTALL_DIR="${1:-.}"
 # 絶対パスを解決する
 INSTALL_DIR=$(cd "$INSTALL_DIR" && pwd)
 
-# i18n設定
-export TEXTDOMAIN="rein"
-export TEXTDOMAINDIR="${INSTALL_DIR}/locales"
-
-# 言語選択モジュールを読み込んで実行
-source "${INSTALL_DIR}/features/setup_language.sh"
-setup_language
-
-echo "$(gettext "Starting Rein setup...")"
+echo "Starting Rein setup..."
 
 # 機能モジュールを読み込む
 source "${INSTALL_DIR}/features/setup_homebrew.sh"
@@ -32,30 +24,30 @@ source "${INSTALL_DIR}/features/setup_shell.sh"
 
 # 1. Homebrewのセットアップ
 if ! setup_homebrew; then
-    echo "$(gettext "Failed to setup Homebrew. Exiting.")"
+    echo "Failed to setup Homebrew. Exiting."
     exit 1
 fi
 
 # 2. gumのセットアップ
 if ! setup_gum; then
-    echo "$(gettext "Failed to setup gum. Exiting.")"
+    echo "Failed to setup gum. Exiting."
     exit 1
 fi
 
 # 3. シェルのセットアップ
 if ! setup_shell "$INSTALL_DIR"; then
-    echo "$(gettext "Failed to setup shell. Exiting.")"
+    echo "Failed to setup shell. Exiting."
     exit 1
 fi
 
 # 4. Gitリポジトリ同期
 if ! setup_git "$INSTALL_DIR"; then
-    echo "$(gettext "Failed to setup git repository. Exiting.")"
+    echo "Failed to setup git repository. Exiting."
     exit 1
 fi
 
 gum style \
     --foreground 82 --border-foreground 82 --border rounded \
     --align center --width 50 --margin "1 2" --padding "2 4" \
-    "$(gettext "Installation Complete!")" \
-    "$(gettext "Please restart your shell.")"
+    "Installation Complete!" \
+    "Please restart your shell."
