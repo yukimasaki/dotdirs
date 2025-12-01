@@ -3,13 +3,16 @@
 # /**
 #  * @file init.sh
 #  * @description Reinのインストールと初期化を行うエントリーポイントスクリプト。
-#  * 必要な機能モジュール（Homebrew, gum, Shell Setup）を順次実行する。
+#  * 必要な機能モジュール（Homebrew, gum, Shell Setup, Git, MCP）を順次実行する。
 #  */
 
 set -e
 
-# 第一引数はインストールディレクトリ。指定がない場合はカレントディレクトリをデフォルトとする
-INSTALL_DIR="${1:-.}"
+# init.shが存在するディレクトリを取得（スクリプトの場所を基準にする）
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# 第一引数はインストールディレクトリ。指定がない場合はinit.shが存在するディレクトリをデフォルトとする
+INSTALL_DIR="${1:-$SCRIPT_DIR}"
 
 # 絶対パスを解決する
 INSTALL_DIR=$(cd "$INSTALL_DIR" && pwd)
@@ -21,6 +24,7 @@ source "${INSTALL_DIR}/features/setup_homebrew.sh"
 source "${INSTALL_DIR}/features/setup_gum.sh"
 source "${INSTALL_DIR}/features/setup_git.sh"
 source "${INSTALL_DIR}/features/setup_shell.sh"
+source "${INSTALL_DIR}/features/setup_mcp_json.sh"
 
 # 1. Homebrewのセットアップ
 if ! setup_homebrew; then
@@ -43,6 +47,12 @@ fi
 # 4. Gitリポジトリ同期
 if ! setup_git "$INSTALL_DIR"; then
     echo "Failed to setup git repository. Exiting."
+    exit 1
+fi
+
+# 5. MCP設定ファイルのセットアップ
+if ! setup_mcp_json "$INSTALL_DIR"; then
+    echo "Failed to setup MCP configuration. Exiting."
     exit 1
 fi
 
