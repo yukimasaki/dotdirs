@@ -64,40 +64,30 @@ _clone_repository() {
         return 1
     fi
     
-    # 一時ディレクトリにクローン
-    local clone_dir="${TMPDIR:-/tmp}/rein-clone-$$"
+    # SCRIPT_DIRが空でない場合、git cloneは失敗するため確認
+    if [ "$(ls -A "$SCRIPT_DIR" 2>/dev/null)" ]; then
+        echo "Error: SCRIPT_DIR is not empty. Cannot clone repository."
+        return 1
+    fi
+    
     local repo_url="https://github.com/${GITHUB_REPO}.git"
     
     echo "Cloning repository from GitHub..."
     
-    # 通常のクローン
-    if git clone --branch "$GITHUB_BRANCH" "$repo_url" "$clone_dir" 2>/dev/null; then
-        # 必要なファイルとディレクトリをSCRIPT_DIRにコピー
-        if [ -d "${clone_dir}/features" ]; then
-            cp -r "${clone_dir}/features" "$SCRIPT_DIR/"
-        fi
-        
-        if [ -f "${clone_dir}/main.sh" ]; then
-            cp "${clone_dir}/main.sh" "$SCRIPT_DIR/"
+    # SCRIPT_DIRに直接クローン（cpコマンドは不要）
+    if git clone --branch "$GITHUB_BRANCH" "$repo_url" "$SCRIPT_DIR" 2>/dev/null; then
+        # 実行権限を付与
+        if [ -f "${SCRIPT_DIR}/main.sh" ]; then
             chmod +x "${SCRIPT_DIR}/main.sh"
         fi
         
-        if [ -d "${clone_dir}/storage" ]; then
-            cp -r "${clone_dir}/storage" "$SCRIPT_DIR/"
-        fi
-        
-        if [ -f "${clone_dir}/install.sh" ]; then
-            cp "${clone_dir}/install.sh" "$SCRIPT_DIR/"
+        if [ -f "${SCRIPT_DIR}/install.sh" ]; then
             chmod +x "${SCRIPT_DIR}/install.sh"
         fi
-        
-        # クローンした一時ディレクトリを削除
-        rm -rf "$clone_dir"
         
         return 0
     else
         echo "Error: Failed to clone repository."
-        rm -rf "$clone_dir" 2>/dev/null || true
         return 1
     fi
 }
