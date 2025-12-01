@@ -28,19 +28,17 @@ _init_config() {
 # /**
 #  * @function _init_directories
 #  * @description ディレクトリパスを初期化する
+#  * 常に/tmp以下の一時ディレクトリを使用する
 #  */
 _init_directories() {
-    # init.shが存在するディレクトリを取得（スクリプトの場所を基準にする）
-    # パイプ経由で実行される場合は、一時ディレクトリを使用
-    if [[ "${BASH_SOURCE[0]}" == *"/dev/fd/"* ]] || [[ "${BASH_SOURCE[0]}" == "-" ]]; then
-        # パイプ経由で実行されている場合
-        SCRIPT_DIR="${TMPDIR:-/tmp}/rein-setup-$$"
-        mkdir -p "$SCRIPT_DIR"
-        trap "rm -rf '$SCRIPT_DIR'" EXIT
-    else
-        # 通常の実行
-        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    # 常に一時ディレクトリを使用
+    SCRIPT_DIR="${TMPDIR:-/tmp}/rein-setup-$$"
+    # 既に存在する場合は削除してから作成
+    if [ -d "$SCRIPT_DIR" ]; then
+        rm -rf "$SCRIPT_DIR"
     fi
+    mkdir -p "$SCRIPT_DIR"
+    trap "rm -rf '$SCRIPT_DIR'" EXIT
 }
 
 # /**
@@ -49,24 +47,10 @@ _init_directories() {
 #  * @returns {number} 成功時は0、失敗時は1
 #  */
 _clone_repository() {
-    # 通常実行時（ローカルにファイルがある場合）はスキップ
-    if [[ "${BASH_SOURCE[0]}" != *"/dev/fd/"* ]] && [[ "${BASH_SOURCE[0]}" != "-" ]]; then
-        # ローカルファイルが存在する場合はそれを使用
-        if [ -f "${SCRIPT_DIR}/install.sh" ]; then
-            return 0
-        fi
-    fi
-    
     # gitコマンドの確認
     if ! command -v git &> /dev/null; then
         echo "Error: git is required but not found."
         echo "Please install git first."
-        return 1
-    fi
-    
-    # SCRIPT_DIRが空でない場合、git cloneは失敗するため確認
-    if [ "$(ls -A "$SCRIPT_DIR" 2>/dev/null)" ]; then
-        echo "Error: SCRIPT_DIR is not empty. Cannot clone repository."
         return 1
     fi
     
