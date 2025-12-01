@@ -196,11 +196,14 @@ _process_template() {
 #  * @function setup_mcp_json
 #  * @description MCP設定ファイルをセットアップする（TUI対応）。
 #  * @param {string} install_dir - プロジェクトがインストールされているディレクトリ。
+#  * @param {string} script_dir - スクリプトが存在するディレクトリ（dotdirs）。
 #  * @returns {number} 成功時は0、失敗時は1
 #  */
 setup_mcp_json() {
     local install_dir="$1"
-    local template_file="${install_dir}/storage/__default__/dynamic/mcp.template.json"
+    local script_dir="$2"
+    # テンプレートファイルはSCRIPT_DIR（dotdirs）にある
+    local template_file="${script_dir}/storage/__default__/dynamic/mcp.template.json"
     
     # テンプレートファイルの存在確認
     if [ ! -f "$template_file" ]; then

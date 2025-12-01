@@ -9,9 +9,11 @@
 # 内部関数: 実際のシェル設定ロジック
 _configure_shell() {
     local install_dir="$1"
+    local script_dir="$2"
     local bin_dir="${install_dir}/bin"
     local rein_link="${bin_dir}/rein"
-    local main_script="${install_dir}/main.sh"
+    # main.shはSCRIPT_DIR（dotdirs）にある
+    local main_script="${script_dir}/main.sh"
 
     # シンボリックリンクを作成
     if [ ! -d "$bin_dir" ]; then
@@ -80,6 +82,7 @@ _configure_shell() {
 #  */
 setup_shell() {
     local install_dir="$1"
+    local script_dir="$2"
     
     if command -v gum &> /dev/null; then
         gum style \
@@ -91,9 +94,9 @@ setup_shell() {
         
         # _configure_shell をエクスポートしてサブプロセスで使えるようにする
         export -f _configure_shell
-        gum spin --spinner dot --title "Setting up shell..." -- bash -c "_configure_shell \"$install_dir\""
+        gum spin --spinner dot --title "Setting up shell..." -- bash -c "_configure_shell \"$install_dir\" \"$script_dir\""
     else
         echo "Installing Rein to $install_dir..."
-        _configure_shell "$install_dir"
+        _configure_shell "$install_dir" "$script_dir"
     fi
 }

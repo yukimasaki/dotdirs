@@ -14,7 +14,6 @@ set -e
 # グローバル変数
 GITHUB_REPO=""
 GITHUB_BRANCH=""
-GITHUB_BASE_URL=""
 SCRIPT_DIR=""
 INSTALL_DIR=""
 FEATURES_DIR=""
@@ -33,7 +32,6 @@ REQUIRED_MODULES=(
 _init_config() {
     GITHUB_REPO="${GITHUB_REPO:-yukimasaki/dotdirs}"
     GITHUB_BRANCH="${GITHUB_BRANCH:-main}"
-    GITHUB_BASE_URL="https://raw.githubusercontent.com/${GITHUB_REPO}/${GITHUB_BRANCH}"
 }
 
 # /**
@@ -66,51 +64,97 @@ _init_directories() {
 }
 
 # /**
-#  * @function _download_module
-#  * @description 機能モジュールをダウンロードする
-#  * @param {string} module_name - モジュール名（例: setup_homebrew.sh）
+#  * @function _clone_repository
+#  * @description リポジトリをgit cloneで取得する（パイプ経由実行時のみ）
 #  * @returns {number} 成功時は0、失敗時は1
 #  */
-_download_module() {
-    local module_name="$1"
-    local module_url="${GITHUB_BASE_URL}/features/${module_name}"
-    local module_path="${FEATURES_DIR}/${module_name}"
-    
-    # featuresディレクトリが存在しない場合は作成
-    mkdir -p "$FEATURES_DIR"
-    
-    # モジュールをダウンロード
-    if curl -fsSL "$module_url" -o "$module_path" 2>/dev/null; then
-        chmod +x "$module_path"
-        return 0
-    else
-        echo "Warning: Failed to download ${module_name}. Trying to use local file if exists."
+_clone_repository() {
+    # 通常実行時（ローカルにファイルがある場合）はスキップ
+    if [[ "${BASH_SOURCE[0]}" != *"/dev/fd/"* ]] && [[ "${BASH_SOURCE[0]}" != "-" ]]; then
         # ローカルファイルが存在する場合はそれを使用
-        if [ -f "${INSTALL_DIR}/features/${module_name}" ]; then
-            cp "${INSTALL_DIR}/features/${module_name}" "$module_path"
-            chmod +x "$module_path"
+        if [ -d "${SCRIPT_DIR}/features" ] && [ -f "${SCRIPT_DIR}/main.sh" ]; then
             return 0
         fi
+    fi
+    
+    # gitコマンドの確認
+    if ! command -v git &> /dev/null; then
+        echo "Error: git is required but not found."
+        echo "Please install git first."
+        return 1
+    fi
+    
+    # 一時ディレクトリにクローン
+    local clone_dir="${TMPDIR:-/tmp}/rein-clone-$$"
+    local repo_url="https://github.com/${GITHUB_REPO}.git"
+    
+    echo "Cloning repository from GitHub..."
+    
+    # 通常のクローン
+    if git clone --branch "$GITHUB_BRANCH" "$repo_url" "$clone_dir" 2>/dev/null; then
+        # 必要なファイルとディレクトリをSCRIPT_DIRにコピー
+        if [ -d "${clone_dir}/features" ]; then
+            cp -r "${clone_dir}/features" "$SCRIPT_DIR/"
+        fi
+        
+        if [ -f "${clone_dir}/main.sh" ]; then
+            cp "${clone_dir}/main.sh" "$SCRIPT_DIR/"
+            chmod +x "${SCRIPT_DIR}/main.sh"
+        fi
+        
+        if [ -d "${clone_dir}/storage" ]; then
+            cp -r "${clone_dir}/storage" "$SCRIPT_DIR/"
+        fi
+        
+        # クローンした一時ディレクトリを削除
+        rm -rf "$clone_dir"
+        
+        return 0
+    else
+        echo "Error: Failed to clone repository."
+        rm -rf "$clone_dir" 2>/dev/null || true
         return 1
     fi
 }
 
 # /**
 #  * @function _load_modules
-#  * @description 必要なモジュールをダウンロードして読み込む
+#  * @description 必要なモジュールをgit cloneで取得して読み込む
 #  * @returns {number} 成功時は0、失敗時は1
 #  */
 _load_modules() {
-    # ローカルのfeaturesディレクトリが存在しない場合、または必要なファイルがない場合はダウンロード
+    # パイプ経由実行時、または必要なファイルが存在しない場合はgit cloneで取得
+    local need_clone=false
+    
+    if [[ "${BASH_SOURCE[0]}" == *"/dev/fd/"* ]] || [[ "${BASH_SOURCE[0]}" == "-" ]]; then
+        # パイプ経由実行時は常にクローン
+        need_clone=true
+    else
+        # 通常実行時、必要なファイルが存在しない場合はクローン
+        if [ ! -d "${FEATURES_DIR}" ] || [ ! -f "${SCRIPT_DIR}/main.sh" ]; then
+            need_clone=true
+        fi
+    fi
+    
+    if [ "$need_clone" = true ]; then
+        if ! _clone_repository; then
+            echo "Error: Failed to clone repository."
+            return 1
+        fi
+    fi
+    
+    # 必要なモジュールファイルの存在確認
     for module in "${REQUIRED_MODULES[@]}"; do
         if [ ! -f "${FEATURES_DIR}/${module}" ]; then
-            echo "Downloading ${module}..."
-            if ! _download_module "$module"; then
-                echo "Error: Failed to download or find ${module}"
-                return 1
-            fi
+            echo "Error: Required module ${module} not found"
+            return 1
         fi
     done
+    
+    if [ ! -f "${SCRIPT_DIR}/main.sh" ]; then
+        echo "Error: main.sh not found"
+        return 1
+    fi
     
     # 機能モジュールを読み込む
     for module in "${REQUIRED_MODULES[@]}"; do
@@ -139,7 +183,7 @@ _run_setup() {
     fi
     
     # 3. シェルのセットアップ
-    if ! setup_shell "$INSTALL_DIR"; then
+    if ! setup_shell "$INSTALL_DIR" "$SCRIPT_DIR"; then
         echo "Failed to setup shell. Exiting."
         return 1
     fi
@@ -151,7 +195,7 @@ _run_setup() {
     fi
     
     # 5. MCP設定ファイルのセットアップ
-    if ! setup_mcp_json "$INSTALL_DIR"; then
+    if ! setup_mcp_json "$INSTALL_DIR" "$SCRIPT_DIR"; then
         echo "Failed to setup MCP configuration. Exiting."
         return 1
     fi
