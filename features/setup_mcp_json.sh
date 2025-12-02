@@ -335,9 +335,11 @@ setup_mcp_json() {
         echo "No .env file found or selected."
         if gum confirm "Do you want to specify a custom .env file path?"; then
             echo "Enter .env file path:"
-            echo "Tip: Press TAB for path completion"
-            # read -e でbashのreadline補完を有効化
-            read -e -p "> " env_file
+            env_file=$(gum input --placeholder "Path to .env file" --prompt "> ")
+            if [ -z "$env_file" ]; then
+                echo "Error: .env file path is required. Operation cancelled."
+                return 1
+            fi
         fi
     fi
     
