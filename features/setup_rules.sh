@@ -205,9 +205,9 @@ select_target_directory() {
     gum style \
         --foreground 212 --border-foreground 212 --border double \
         --align center --width 50 --margin "1 2" --padding "2 4" \
-        "Rules Setup" "Select target directory"
+        "Rules Setup" "Select target directory" >&2
     
-    echo "Select target directory:"
+    echo "Select target directory:" >&2
     
     # デフォルトディレクトリを取得
     local default_dir=$(resolve_target_base_directory "$editor")
@@ -238,8 +238,8 @@ select_target_directory() {
     local output_dir=""
     if [ "$selected_option" = "Custom path..." ]; then
         # カスタムパス入力
-        echo "Enter target directory path (absolute or relative to current directory):"
-        output_dir=$(gum input --placeholder "$default_dir" --prompt "> ")
+        echo "Enter target directory path (absolute or relative to current directory):" >&2
+        output_dir=$(gum input --placeholder "$default_dir")
         
         # 空入力の場合、デフォルトディレクトリを使用するか確認
         if [ -z "$output_dir" ]; then
@@ -305,7 +305,7 @@ setup_rules() {
     gum style \
         --foreground 212 --border-foreground 212 --border double \
         --align center --width 50 --margin "1 2" --padding "2 4" \
-        "Rules Setup" "Select editor/agent"
+        "Rules Setup" "Select editor/agent" >&2
     
     local selected_editor=$(select_editor)
     if [ -z "$selected_editor" ]; then
