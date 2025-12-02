@@ -209,25 +209,22 @@ select_target_directory() {
     
     echo "Select target directory:" >&2
     
-    # デフォルトディレクトリを取得
-    local default_dir=$(resolve_target_base_directory "$editor")
+    # エディタ別のデフォルトディレクトリ（相対パス）を設定
+    local default_relative_dir=""
+    case "$editor" in
+        "cursor")
+            default_relative_dir="./.cursor"
+            ;;
+        "antigravity")
+            default_relative_dir="./.agent"
+            ;;
+        *)
+            default_relative_dir="."
+            ;;
+    esac
     
-    # よく使われるディレクトリの候補
-    local common_dirs=(
-        "$default_dir"
-        "$HOME/.cursor"
-        "$HOME/.agent"
-        "$HOME"
-        "$(pwd)"
-    )
-    
-    # 既存のディレクトリを候補に追加
-    local dir_options=("Custom path...")
-    for dir in "${common_dirs[@]}"; do
-        if [ -d "$dir" ] && [[ ! " ${dir_options[@]} " =~ " ${dir} " ]]; then
-            dir_options+=("$dir")
-        fi
-    done
+    # 候補リストを構築
+    local dir_options=("$default_relative_dir" "Custom path...")
     
     local selected_option=$(printf '%s\n' "${dir_options[@]}" | gum choose)
     
@@ -237,6 +234,8 @@ select_target_directory() {
     
     local output_dir=""
     if [ "$selected_option" = "Custom path..." ]; then
+        # デフォルトディレクトリを取得（絶対パス）
+        local default_dir=$(resolve_target_base_directory "$editor")
         # カスタムパス入力
         echo "Enter target directory path (absolute or relative to current directory):" >&2
         output_dir=$(gum input --placeholder "$default_dir")
