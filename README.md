@@ -17,3 +17,6 @@ cd path/to/your/project
 curl -fsSL https://raw.githubusercontent.com/yukimasaki/dotdirs/main/init.sh | bash -s -- .
 ```
 
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTkzMjIzNjc5MF19
+-->
