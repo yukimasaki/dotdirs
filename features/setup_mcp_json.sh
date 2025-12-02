@@ -246,27 +246,19 @@ setup_mcp_json() {
     local selected_option=$(printf '%s\n' "${dir_options[@]}" | gum choose)
     
     if [ "$selected_option" = "Custom path..." ]; then
-        # カスタムパス入力ループ（空入力時の処理を含む）
-        while true; do
-            echo "Enter output directory path (absolute or relative to current directory):"
-            echo "Tip: Press TAB for path completion"
-            # read -e でbashのreadline補完を有効化
-            read -e -p "> " output_dir
-            
-            # 空入力の場合
-            if [ -z "$output_dir" ]; then
-                if gum confirm "Do you want to create mcp.json in the current directory?"; then
-                    output_dir="$(pwd)"
-                    break
-                else
-                    echo "Output directory is required. Please specify a directory path."
-                    echo ""
-                    continue
-                fi
+        # カスタムパス入力（gum inputを使用）
+        echo "Enter output directory path (absolute or relative to current directory):"
+        output_dir=$(gum input --placeholder "$(pwd)" --prompt "> ")
+        
+        # 空入力の場合、カレントディレクトリを使用するか確認
+        if [ -z "$output_dir" ]; then
+            if gum confirm "Do you want to create mcp.json in the current directory ($(pwd))?"; then
+                output_dir="$(pwd)"
             else
-                break
+                echo "Error: Output directory is required. Operation cancelled."
+                return 1
             fi
-        done
+        fi
     else
         output_dir="$selected_option"
     fi
