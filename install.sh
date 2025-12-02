@@ -3,7 +3,7 @@
 # /**
 #  * @file install.sh
 #  * @description Reinのインストールと初期化を行うスクリプト。
-#  * 必要な機能モジュール（Homebrew, gum, Git, MCP）を順次実行する。
+#  * 必要な機能モジュール（Homebrew, gum, Git, MCP, Rules）を順次実行する。
 #  * init.shから呼び出される。
 #  */
 
@@ -18,6 +18,7 @@ REQUIRED_MODULES=(
     "setup_gum.sh"
     "setup_git.sh"
     "setup_mcp_json.sh"
+    "setup_rules.sh"
 )
 
 # /**
@@ -94,6 +95,12 @@ _run_setup() {
     # 4. MCP設定ファイルのセットアップ
     if ! setup_mcp_json "$INSTALL_DIR" "$SCRIPT_DIR"; then
         echo "Failed to setup MCP configuration. Exiting."
+        return 1
+    fi
+    
+    # 5. ルールファイルのセットアップ
+    if ! setup_rules "$INSTALL_DIR" "$SCRIPT_DIR"; then
+        echo "Failed to setup rules. Exiting."
         return 1
     fi
     
